@@ -1,0 +1,29 @@
+{{- if .Values.localStorage.enabled }}
+{{- $start := .Values.localStorage.startIndex }}
+{{- $step := .Values.localStorage.step }}
+{{- range $i, $e := until (int .Values.replicaCount) }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ $.Values.localStorage.pvPrefix }}-worker-{{ add $start (mul $i $step) }}
+spec:
+  capacity:
+    storage: {{ $.Values.localStorage.storageSize }}
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: {{ $.Values.localStorage.name }}
+  local:
+    path: {{ $.Values.localStorage.localPath }}
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - {{ $.Values.localStorage.workerNodePrefix }}{{ add $start (mul $i $step) }}
+  persistentVolumeReclaimPolicy: Retain
+---
+{{- end }}
+{{- end }}

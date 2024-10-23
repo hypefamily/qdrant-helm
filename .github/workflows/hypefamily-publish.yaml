@@ -2,7 +2,7 @@ name: Publish Helm Charts
 on:
   push:
     tags:
-      - 'hypefamily-qdrant-*.*.*'
+      - '*.*.*'
 
 env:
   HELM_EXPERIMENTAL_OCI: 1

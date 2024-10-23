@@ -141,8 +141,18 @@ persistence:
   accessModes: ["ReadWriteOnce"]
   size: 10Gi
   annotations: {}
-  # storageVolumeName: qdrant-storage
-  # storageClassName: local-path
+  # storageVolumeName: qdrant-volume
+  # storageClassName: local-storage
+
+localStorage:
+  enabled: false # change to true to enable localStorage on your nodes
+  name: qdrant-storage
+  pvPrefix: local-pv-qdrant
+  storageSize: 10Gi
+  localPath: /mnt
+  workerNodePrefix: server
+  startIndex: 0 # starting index for your nodes, e.g. server0
+  step: 2 # index for creating server0, server2, etc
 
 # If you use snapshots or the snapshot shard transfer mechanism, we recommend
 # creating a separate volume of the same size as your main volume so that your
